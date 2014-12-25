@@ -6,6 +6,8 @@ admin.autodiscover()
 from links.views import LinkListView
 from links.views import UserProfileDetailView
 from links.views import UserProfileEditView
+from links.views import LinkCreateView
+from links.views import LinkDetailView
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
@@ -20,5 +22,8 @@ urlpatterns = patterns('',
     url(r"^users/(?P<slug>\w+)/$", UserProfileDetailView.as_view(),
         name="profile"),
     url(r"edit_profile/$", auth(UserProfileEditView.as_view()),
-        name="edit_profile")
+        name="edit_profile"),
+    url(r"^link/create/$", auth(LinkCreateView.as_view()), name='link_create'), 
+    url(r'^link/(?P<pk>\d+)/$', LinkDetailView.as_view(),
+    name='link_detail'),   
 )

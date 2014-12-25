@@ -4,11 +4,16 @@ from .forms import UserProfileForm
 from django.contrib.auth import get_user_model
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse
+from django.views.generic.edit import CreateView
+from .forms import LinkForm
 
 class LinkListView(ListView):
     model = Link
     queryset = Link.with_votes.all()
-    paginate_by = 5
+    paginate_by = 20
+
+class LinkDetailView(DetailView):
+    model = Link   
 
 
 class UserProfileDetailView(DetailView):
@@ -31,3 +36,15 @@ class UserProfileEditView(UpdateView):
 
     def get_success_url(self):
         return reverse("profile", kwargs={"slug": self.request.user})
+
+class LinkCreateView(CreateView):
+    model = Link
+    form_class = LinkForm
+
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.rank_score = 0.0
+        f.submitter = self.request.user
+        f.save()
+
+        return super(CreateView, self).form_valid(form)        
