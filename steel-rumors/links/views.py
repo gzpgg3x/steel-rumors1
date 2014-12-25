@@ -6,6 +6,9 @@ from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import CreateView
 from .forms import LinkForm
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic.edit import UpdateView
+from django.views.generic.edit import DeleteView
 
 class LinkListView(ListView):
     model = Link
@@ -47,4 +50,12 @@ class LinkCreateView(CreateView):
         f.submitter = self.request.user
         f.save()
 
-        return super(CreateView, self).form_valid(form)        
+        return super(CreateView, self).form_valid(form) 
+
+class LinkUpdateView(UpdateView):
+    model = Link
+    form_class = LinkForm
+
+class LinkDeleteView(DeleteView):
+    model = Link
+    success_url = reverse_lazy("home")                   

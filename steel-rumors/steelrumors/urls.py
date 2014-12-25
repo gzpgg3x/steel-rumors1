@@ -8,6 +8,8 @@ from links.views import UserProfileDetailView
 from links.views import UserProfileEditView
 from links.views import LinkCreateView
 from links.views import LinkDetailView
+from links.views import LinkUpdateView
+from links.views import LinkDeleteView
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
@@ -25,5 +27,9 @@ urlpatterns = patterns('',
         name="edit_profile"),
     url(r"^link/create/$", auth(LinkCreateView.as_view()), name='link_create'), 
     url(r'^link/(?P<pk>\d+)/$', LinkDetailView.as_view(),
-    name='link_detail'),   
+        name='link_detail'), 
+    url(r'^link/update/(?P<pk>\d+)/$', auth(LinkUpdateView.as_view()),
+        name='link_update'),
+    url(r'^link/delete/(?P<pk>\d+)/$', auth(LinkDeleteView.as_view()),
+        name='link_delete'),      
 )
