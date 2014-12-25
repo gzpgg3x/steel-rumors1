@@ -9,8 +9,15 @@ from .forms import LinkForm
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
+from django.contrib.comments.models import Comment
 
-class LinkListView(ListView):
+class RandomGossipMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(RandomGossipMixin, self).get_context_data(**kwargs)
+        context[u"randomquip"] = Comment.objects.order_by('?')[0]
+        return context
+
+class LinkListView(RandomGossipMixin, ListView):
     model = Link
     queryset = Link.with_votes.all()
     paginate_by = 20
